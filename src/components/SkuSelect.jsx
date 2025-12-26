@@ -18,9 +18,9 @@ export default function SkuSelect({ placeholder, options }) {
             >
                 <option value="">{placeholder}</option>
                 {options.map((option) => (
-                    <options key={option} value={option}>
+                    <option key={option} value={option}>
                         {options}
-                    </options>
+                    </option>
                 ))}
             </select>
             <div className="absolute top-1/2 right-2 transform -translate-y-1/2">

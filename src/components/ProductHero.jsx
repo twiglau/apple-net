@@ -1,3 +1,5 @@
+import SkuSelect from "./SkuSelect";
+
 export default function ProductHero({ product, imageUrl }) {
     return (
         <div
@@ -26,10 +28,26 @@ export default function ProductHero({ product, imageUrl }) {
                     RMD {Number(product.startingPrice).toLocaleString("en-US")}
                 </span>
                 <div className="flex space-x-3">
-                    <select name="" id=""></select>型号
-                    <select name="" id=""></select>颜色
-                    <select name="" id=""></select>存储
-                    <button>加入购物车</button>
+                    <SkuSelect
+                    placeholder={'型号'}
+                    options={product.models.map(model => model.name)}
+                    />
+                    <SkuSelect placeholder={'颜色'} options={product.colors} />
+                    <SkuSelect 
+                    placeholder={'储存颜色'} 
+                    options={product.memorySizes.map(size => size.name)}
+                     />
+                    <button
+                    className="
+                    border border-apple-blue
+                    px-5 py-2 bg-transparent
+                    rounded-md
+                    hover:bg-apple-blue 
+                    hover:text-apple-gray-100
+                    "
+                    >
+                        加入购物车
+                    </button>
                 </div>
             </div>
         </div>
