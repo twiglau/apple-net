@@ -1,6 +1,6 @@
 
 import { NEW_ARRIVALS_LIST, OFFER_LIST, SUGGESTED_PROUDCT } from "@/assets/data"; // 引入数据文件
-import {ProductList} from "@components/ProductList";
+import {ProductList} from "@components/index";
 import NewArrival, { type NewArrivalProps } from "@components/NewArrival";
 import Offer from "@components/Offer";
 import withSoldOut from "@/HOCs/withSoldOut";

@@ -2,24 +2,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./main.css"; // 引入 CSS 文件
-import MainLayout from "@/layouts/MainLayout";
-import Home from '@/pages/Home'
-import Header from '@components/Header'
-import Footer from '@components/Footer'
+import App from "./App";
+import { BrowserRouter } from "react-router-dom";
 
-export function App() {
 
-  //单根节点原则
-  return (
-    <div>
-      <MainLayout 
-      header={<Header />}
-      content={<Home />}
-      footer={<Footer />}
-      />
-    </div>
-  );
-}
 
 // JSX 是 JavaScript 的语法扩展，它让我们可以在 JavaScript 里直接写出类似 HTML 的结构
 // JSX = HTML 的语法 + JavaScript 的能力
@@ -41,7 +27,9 @@ rootElement.render(
     {/* 它不会影响组件的属性 */}
     {/* 它不会影响组件的事件 */}
     {/* 它不会影响组件的上下文 */}
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 ); // 渲染 App 组件到根元素
 

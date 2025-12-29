@@ -18,7 +18,7 @@ type ProductListProps = {
   total:number;
   children: React.ReactNode;
 }
-export function ProductList({title, children, total}: ProductListProps) {
+export default function ProductList({title, children, total}: ProductListProps) {
     
     if(total===0){
         return <div>暂无新品</div>
