@@ -1,13 +1,28 @@
 import Logo from '@/assets/apple.svg?react';
+// 1. 不加 ?react 使用 <img />
 import { AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
 import { useState } from 'react';
 import DarkToggle from './DarkToggle';
-// 1. 不加 ?react 使用 <img />
+import { SHOPPING_PAGES } from "@/assets/data/path"
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export default function Header() {
 
     const [isOpen, setIsOpen] = useState(false);
+    const [query, setQuery] = useState('');
     const [isSearchEnable,setIsSearchEnable ] = useState(false);
+    const navigate = useNavigate();
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            // 处理搜索逻辑
+            e.preventDefault();
+            if(query.trim()) {
+                navigate(`/search?query=${encodeURIComponent(query)}`);
+                setQuery('');
+            }
+        }
+    };
 
     return (
         <nav className="text-sm flex items-center 
@@ -20,12 +35,21 @@ export default function Header() {
             <div className='gap-3 hidden  md:flex 
             text-apple-text-light
             dark:text-apple-text-dark'>
-                <a href='#'>商店</a>
-                <a href='#'>电脑</a>
-                <a href='#'>手机</a>
-                <a href='#'>智能家居</a>
-                <a href='#'>娱乐</a>
-                <a href='#'>计数支持</a>
+                {SHOPPING_PAGES.map((page) => (
+                    <NavLink
+                    to={page.path}
+                    key={page.path}
+                    className={({isActive}) => `hover:text-apple-blue ${
+                        isActive 
+                        ? 'text-apple-blue font-extrabold' 
+                        : 'text-apple-text-light dark:text-apple-text-dark'
+                      }
+                    `}
+                    onClick={() => setIsOpen(false)}
+                    >
+                        {page.title}
+                    </NavLink>
+                ))}
             </div>
             { isSearchEnable && (
                 <div className='relative'>
@@ -33,6 +57,9 @@ export default function Header() {
                     className='peer border border-apple-gray-200
                     px-4 py-2 flex-1 rounded-lg 
                     focus:outline-none focus:ring-2 focus:ring-apple-blue transition'
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     />
                     <label
                     className='absolute left-2 top-2 
@@ -63,16 +90,28 @@ export default function Header() {
             </div>
             <div className={`md:hidden fixed top-0 right-0 h-full w-64 ${!isOpen && "hidden"}`}>
                 <div className='flex flex-col mt-17  space-y-6 
-                bg-apple-light dark:bg-apple-dark
-                    text-apple-text-light
+                bg-apple-light 
+                dark:bg-apple-dark
+                  shadow-apple-md
+                text-apple-text-light 
                    dark:text-apple-text-dark
                    text-center p-6 rounded-lg'>
-                    <a href='#'>商店</a>
-                    <a href='#'>电脑</a>
-                    <a href='#'>手机</a>
-                    <a href='#'>智能家居</a>
-                    <a href='#'>娱乐</a>
-                    <a href='#'>计数支持</a>
+                    {SHOPPING_PAGES.map((page) => (
+                        <NavLink
+                        to={page.path}
+                        key={page.path}
+                        className={({isActive}) => `
+                          hover:text-apple-blue ${
+                            isActive 
+                            ? 'text-apple-blue font-extrabold' 
+                            : 'text-apple-text-light dark:text-apple-text-dark'
+                          }
+                        `}
+                        onClick={() => setIsOpen(false)}
+                        >
+                            {page.title}
+                        </NavLink>
+                    ))}
                 </div>
             </div>
             {isOpen && (

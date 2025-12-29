@@ -16,6 +16,11 @@ import {
   ErrorPage,
 } from "../pages";
 import BlankLayout from "@/layouts/BlankLayout";
+import RequireAuth from "@/HOCs/RequireAuth";
+import UserCenter from "@/pages/UserCenter";
+import UserLayout from "@/layouts/UserLayout";
+import ProductDetail from "@/pages/ProductDetail";
+import SearchResults from "@/pages/SearchResults";
 
 const router =  createBrowserRouter([
     {
@@ -46,6 +51,8 @@ const router =  createBrowserRouter([
                 errorElement: <ErrorPage />,
             },
             { path: "phones", element: <Phones />, errorElement: <ErrorPage /> },
+            { path: "product-detail/:id", element: <ProductDetail />, errorElement: <ErrorPage /> },
+            { path: "search", element: <SearchResults />, errorElement: <ErrorPage />},
             { path: "*", element: <NotFound /> },
         ]
     },
@@ -58,6 +65,20 @@ const router =  createBrowserRouter([
         { path: "register", element: <Register /> },
         ],
     },
+    {
+        path: "/user",
+        element: (
+            <RequireAuth>
+                <UserLayout />
+            </RequireAuth>
+        ),
+        children: [
+            {
+                path: '',
+                element: <UserCenter />
+            }
+        ]
+    }
 ])
 
 export default  router;
