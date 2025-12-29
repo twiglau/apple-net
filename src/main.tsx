@@ -23,7 +23,7 @@ export function App() {
 
 // JSX 是 JavaScript 的语法扩展，它让我们可以在 JavaScript 里直接写出类似 HTML 的结构
 // JSX = HTML 的语法 + JavaScript 的能力
-const root = document.getElementById("root"); // 获取 id 为 root 的 DOM 元素
+const root = document.getElementById("root")!; // 获取 id 为 root 的 DOM 元素
 const rootElement = ReactDOM.createRoot(root); // 创建一个 React 根元素
 rootElement.render(
   <React.StrictMode>

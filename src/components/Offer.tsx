@@ -1,6 +1,15 @@
 import styles from "./Offer.module.css";
 
-export default function Offer({type, title, detail,image }) {
+
+export interface OfferProps {
+  type: string;
+  title: string;
+  detail: string;
+  image: string;
+  soldOut?:boolean;
+}
+
+export default function Offer({type, title, detail,image }: OfferProps) {
     return (
         <div className={styles.container}>
             <img src={image} alt={type} className={styles.image} />

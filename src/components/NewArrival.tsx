@@ -1,7 +1,10 @@
 import styles from "./Product.module.css";
 import styled from "styled-components";
 
-const StyledProductTextContainer = styled.div`
+type StyledProductTextContainerProps = {
+  $textColor: string;
+};
+const StyledProductTextContainer = styled.div<StyledProductTextContainerProps>`
   position: absolute;
   top: 1.5rem;
   padding-left: 1.5rem;
@@ -9,7 +12,13 @@ const StyledProductTextContainer = styled.div`
   color: ${(props) => props.$textColor || "white"};
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 `;
-const StyledProductContainer = styled.div`
+
+type StyledProductContainerProps = {
+  $scale?: number;
+  $transition?: string;
+};
+
+const StyledProductContainer = styled.div<StyledProductContainerProps>`
   max-width: 28rem;
   position: relative;
   transition: transform ${(props) => props.$transition || "0.1s"} ease-in-out;
@@ -20,7 +29,23 @@ const StyledProductContainer = styled.div`
   }
 `;
 
-function Product({ image, title, detail, textColor, scale = 1.05, onProductClick }) {
+export type NewArrivalProps = {
+  image: string;
+  title: string;
+  detail: string;
+  textColor: string;
+  soldOut?: boolean;
+  scale?: number;
+  onProductClick: (title: string) => void;
+};
+
+function NewArrival({ 
+  image, 
+  title, 
+  detail, 
+  textColor, 
+  scale = 1.05, 
+  onProductClick } : NewArrivalProps) {
   const imgStyle = {
     height: "auto",
     width: "100%",
@@ -41,4 +66,4 @@ function Product({ image, title, detail, textColor, scale = 1.05, onProductClick
   );
 }
 
-export default Product;
+export default NewArrival;

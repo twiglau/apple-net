@@ -1,4 +1,11 @@
-const MainLayout = ({header, content, footer}) => {
+import type { ReactNode } from 'react';
+
+
+const MainLayout = ({header, content, footer}: {
+    header?:ReactNode;
+    content?:ReactNode;
+    footer?:ReactNode;
+}) => {
     return (
         <div
         className="bg-apple-light dark:bg-apple-dark"

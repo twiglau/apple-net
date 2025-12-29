@@ -12,9 +12,15 @@ const StyledListTitle = styled.h1`
   background-image: url('src/assets/lines.png');
   background-position: center;
 `;
-export function ProductList({title, children, total}) {
+
+type ProductListProps = {
+  title: string;
+  total:number;
+  children: React.ReactNode;
+}
+export function ProductList({title, children, total}: ProductListProps) {
     
-    if(total.length===0){
+    if(total===0){
         return <div>暂无新品</div>
     }
 
