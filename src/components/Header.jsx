@@ -1,13 +1,16 @@
 import Logo from '@/assets/apple.svg?react';
 // 1. 不加 ?react 使用 <img />
 import { AiOutlineMenu, AiOutlineSearch, AiOutlineShopping } from 'react-icons/ai';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import DarkToggle from './DarkToggle';
 import { SHOPPING_PAGES } from "@/assets/data/path"
 import { NavLink, useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion as Motion } from 'framer-motion'
+import { CartContext } from '@/contexts/shopping';
 
 export default function Header() {
 
+    const {cartItems} = useContext(CartContext)
     const [isOpen, setIsOpen] = useState(false);
     const [query, setQuery] = useState('');
     const [isSearchEnable,setIsSearchEnable ] = useState(false);
@@ -86,6 +89,24 @@ export default function Header() {
                 onClick={() => navigate('/cart')}
                 >
                     <AiOutlineShopping size={24} />
+                    <AnimatePresence>
+                        {cartItems.length > 0 && (
+                            <Motion.span
+                            className="absolute
+                            top-0 right-0 translate-x-1/2 -translate-y-1/2
+                            bg-apple-red text-white text-xs font-bold 
+                            size-5 rounded-full flex items-center justify-center
+                            "
+                            key={cartItems.length}
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{  scale: 0, opacity: 0 }}
+                            transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                            >
+                                {cartItems.length}
+                            </Motion.span>
+                        )}
+                    </AnimatePresence>
                 </button>
                 <button 
                 className='md:hidden'

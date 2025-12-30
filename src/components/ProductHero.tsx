@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import SkuSelect from "./SkuSelect";
 import { produce } from 'immer'
 import type { Product, CartItem } from "@/types/custom";
+import Button from "./Button";
+import { CartContext } from "@/contexts/shopping";
 
 type ProductHeroProps = {
   product: Product;
@@ -17,6 +19,7 @@ const updateItem = (updates: Partial<CartItem>) => {
 
 export default function ProductHero({ product, imageUrl }: ProductHeroProps) {
 
+    const { addToCart } = useContext(CartContext)
     const [cartItem,setCartItem ] = useState<CartItem>({
         productId: product.id,
         name: product.name,
@@ -30,7 +33,15 @@ export default function ProductHero({ product, imageUrl }: ProductHeroProps) {
         memorySizePrice: null,
         qty: 1,
     });
-    console.log('cartItem', cartItem)
+    
+    const handleAddToCart = () => {
+        const {modelId,color,memorySizeId,memorySize,model} = cartItem
+        if(!modelId || !color || !memorySizeId || !memorySize || !model) {
+            alert('请选择型号，颜色和储存大小')
+            return
+        }
+        addToCart(cartItem)
+    }
     return (
         <div
         className="flex flex-col lg:flex-row-reverse
@@ -57,7 +68,7 @@ export default function ProductHero({ product, imageUrl }: ProductHeroProps) {
                 >
                     RMD {Number(product.startingPrice).toLocaleString("en-US")}
                 </span>
-                <div className="flex space-x-3">
+                <div className="flex space-x-1">
                     <SkuSelect
                     placeholder={'型号'}
                     options={product.models.map(model => model.name)}
@@ -98,17 +109,11 @@ export default function ProductHero({ product, imageUrl }: ProductHeroProps) {
                         }
                     }}
                      />
-                    <button
-                    className="
-                    border border-apple-blue
-                    px-5 py-2 bg-transparent
-                    rounded-md
-                    hover:bg-apple-blue 
-                    hover:text-apple-gray-100
-                    "
-                    >
-                        加入购物车
-                    </button>
+                    <Button 
+                    variant="outline"
+                    title="添加到购物车"
+                    onClick={() => handleAddToCart()}
+                    />
                 </div>
             </div>
         </div>

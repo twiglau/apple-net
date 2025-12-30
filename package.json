@@ -11,7 +11,7 @@
     "say-hi": "echo 'hi'"
   },
   "dependencies": {
-    "framer-motion": "^12.6.5",
+    "framer-motion": "^12.23.26",
     "immer": "^11.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

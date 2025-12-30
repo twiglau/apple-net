@@ -16,9 +16,9 @@ export default function SkuSelect({ placeholder, options, value, onChange }: Sku
             className="
               border border-apply-gray-200
               rounded-md
-              w-24 py-2 px-3
+              w-18 py-2 px-3
               bg-none bg-no-repeat appearance-none
-              pr-8
+              pr-6
               dark:border-apple-gray-800
               text-apple-text-light
               dark:text-apple-text-dark
@@ -26,15 +26,15 @@ export default function SkuSelect({ placeholder, options, value, onChange }: Sku
             onChange={e => onChange(e.target.value)}
             value={value || ''}
             >
-                <option value="">{placeholder}</option>
+                <option value="-1">{placeholder}</option>
                 {options.map((option) => (
                     <option key={option} value={option}>
-                        {options}
+                        {option}
                     </option>
                 ))}
             </select>
-            <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
-              <IoIosArrowDropdown className="size-4 text-apple-text-light dark:text-apple-text-dark" />
+            <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center">
+                <IoIosArrowDropdown className="size-4 text-apple-text-light dark:text-apple-text-dark" />
             </div>
         </div>
     )

@@ -1,6 +1,6 @@
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import type { Color, MemorySize, Product, ProductModel } from "@/types/custom";
+import type { CartItem, Color, MemorySize, Product, ProductModel } from "@/types/custom";
 import ProductTitle from "./ProductTitle";
 import ProductHero from "./ProductHero";
 import SelectTitle from "./SelectTitle";
@@ -8,9 +8,12 @@ import SelectSquare from "./SelectSquare";
 import SelectCircle from "./SelectCircle";
 import PriceTag from "./PriceTag";
 import { Button } from "@/components";
+import { CartContext } from "@/contexts/shopping";
+import { useContext } from "react";
 
 
 const ProductDetail = () => {
+    const { addToCart } = useContext(CartContext);
     const [selectModel, setSelectModel] = useState<ProductModel>();
     const [selectColor, setSelectColor] = useState<Color>();
     const [selectMemorySize, setSelectMemorySize] = useState<MemorySize>(); 
@@ -28,6 +31,27 @@ const ProductDetail = () => {
         const total = (product.startingPrice || 0) + (selectModel?.price || 0) + (selectMemorySize?.price || 0);
         setTotalAmount(total);
     }, [selectModel, selectMemorySize, product]);
+
+    const handleAddToCart = () => {
+        if(!selectModel || !selectColor || !selectMemorySize) {
+            return;
+        }
+
+        const cartItem: CartItem = {
+            productId: product.id,
+            name: product.name,
+            imageSrc: product.image,
+            modelId: selectModel.id,
+            modelPrice: selectModel.price,
+            model: selectModel.name,
+            color: selectColor,
+            memorySize: selectMemorySize.name,
+            memorySizeId: selectMemorySize.id,
+            memorySizePrice: selectMemorySize.price,
+            qty: 1
+        }
+        addToCart(cartItem);
+    }
     
     return (
         <div className="min-h-screen px-4 lg:px-32
@@ -95,7 +119,7 @@ const ProductDetail = () => {
             />
 
             <div className="flex justify-end mt-12 mr-8">
-                <Button title="加入购物车" />
+                <Button title="加入购物车" onClick={() => handleAddToCart()}/>
             </div>
         </div>
     )
