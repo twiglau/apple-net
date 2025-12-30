@@ -1,9 +1,16 @@
 import { Button } from "@/components";
 import type { Product } from "@/types/custom";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function SearchProductCard(product: Product) {
+interface SearchProductCardProps {
+    product: Product,
+    onAddToCart?: (product: Product) => void
+}
+
+const SearchProductCard = ({product, onAddToCart}: SearchProductCardProps) => {
     const navigate = useNavigate();
+    console.log('SearchProductCard', product);
     return (
         <div className=" bg-apple-gray-100 dark:bg-apple-gray-900 dark:border-apple-gray-500
         rounded-2xl shadow-sm p-6 
@@ -24,7 +31,10 @@ export default function SearchProductCard(product: Product) {
                     {product.startingPrice}
                 </span>
                 <div className="flex gap-3">
-                    <Button title="立刻购买" />
+                    <Button 
+                    title="添加购物车" 
+                    onClick={() => onAddToCart && onAddToCart(product)}
+                    />
                     <Button 
                     title="了解更多"
                     variant="outline"
@@ -38,3 +48,5 @@ export default function SearchProductCard(product: Product) {
         </div>
     )
 }
+
+export default React.memo(SearchProductCard);

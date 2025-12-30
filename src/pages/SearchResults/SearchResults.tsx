@@ -1,14 +1,17 @@
-import type { Product } from "@/types/custom";
+import type { CartItem, Product } from "@/types/custom";
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useDebounce } from "@/helpers/useDebounce";
 import SearchProductCard from "./SearchProductCard";
 import { Button } from "@/components";
+import { CartContext } from "@/contexts/shopping";
 
 const SearchResults = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('query');
     const debouncedQuery = useDebounce(query, 500);
+
+    const {addToCart} = useContext(CartContext);
 
     const page = Number(searchParams.get('page')) || 1;
     const handlePageChange = (newPage: number) => {
@@ -18,6 +21,25 @@ const SearchResults = () => {
         });
     };
     const [searchResults, setSearchResults] = useState<Product[]>([])
+
+
+    const cartAction = (product: Product) => {
+        const cartItem: CartItem = {
+            productId: product.id,
+            name: product.name,
+            imageSrc: product.image,
+            modelId: product.models[0]?.name || '',
+            modelPrice: product.models[0]?.price || 0,
+            memorySizeId: product.memorySizes[0]?.id || '',
+            memorySize: product.memorySizes[0]?.name || '',
+            memorySizePrice: product.memorySizes[0]?.price || 0,
+            color: product.colors[0] || '',
+            model: product.models[0]?.name || '',
+            qty: 1,
+        }
+        addToCart(cartItem);
+    }
+    const handleAddToCart = useCallback(cartAction, []);
 
     const searchAction = async (signal: AbortSignal) => {
         try {
@@ -66,7 +88,11 @@ const SearchResults = () => {
             {/* 搜索结果 */}
             <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
                 {searchResults.map((product) => (
-                    <SearchProductCard key={product.id} {...product} />
+                    <SearchProductCard 
+                        key={product.id} 
+                        product={product} 
+                        onAddToCart={handleAddToCart}
+                    />
                 ))}
             </div>
             <div className="flex items-center justify-center mt-8 gap-6">
