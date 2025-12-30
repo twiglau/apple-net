@@ -1,5 +1,4 @@
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
-import { product_list } from "@/assets/data/products";
 import { useEffect, useState } from "react";
 import type { Color, MemorySize, Product, ProductModel } from "@/types/custom";
 import ProductTitle from "./ProductTitle";
@@ -38,7 +37,7 @@ const ProductDetail = () => {
             <ProductTitle
             name={product.name}
             startingPrice={product.startingPrice}
-            installment={product.installments}
+            installments={product.installments}
             />
             <div className="flex flex-col lg:flex-row gap-6 mt-12">
                 <ProductHero imageUrl={product.carouselImages[0] || ''} />

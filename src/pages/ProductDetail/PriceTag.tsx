@@ -8,8 +8,8 @@ interface TextLineProps {
 }
 interface PriceTagProps {
     modelAmount: number;
-    colorAmount?: number;
-    sizeAmount?: number;
+    colorAmount?: number | undefined;
+    sizeAmount?: number | undefined;
     totalAmount: number;
 }
 
