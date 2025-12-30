@@ -1,6 +1,6 @@
 import { Footer, Header } from "@/components"
 import MainLayout from "@/layouts/MainLayout"
-import { createBrowserRouter } from "react-router-dom"
+import { createBrowserRouter, type LoaderFunctionArgs } from "react-router-dom"
 import {
   About,
   Computers,
@@ -19,8 +19,9 @@ import BlankLayout from "@/layouts/BlankLayout";
 import RequireAuth from "@/HOCs/RequireAuth";
 import UserCenter from "@/pages/UserCenter";
 import UserLayout from "@/layouts/UserLayout";
-import ProductDetail from "@/pages/ProductDetail";
-import SearchResults from "@/pages/SearchResults";
+import { ProductDetail } from "@/pages/ProductDetail";
+import {SearchResults} from "@/pages/SearchResults";
+import { loadProducts } from "@/helpers/loaders";
 
 const router =  createBrowserRouter([
     {
@@ -51,7 +52,18 @@ const router =  createBrowserRouter([
                 errorElement: <ErrorPage />,
             },
             { path: "phones", element: <Phones />, errorElement: <ErrorPage /> },
-            { path: "product-detail/:id", element: <ProductDetail />, errorElement: <ErrorPage /> },
+            { 
+                path: "product-detail/:id", 
+                element: <ProductDetail />, 
+                errorElement: <ErrorPage />,
+                loader: async ({ params, request }: LoaderFunctionArgs) => {
+                    const productId = params.id;
+                    if(!productId) {
+                        throw new Response("Product ID is required", { status: 400 });
+                    }
+                    return await loadProducts(productId, request.signal);
+                }
+            },
             { path: "search", element: <SearchResults />, errorElement: <ErrorPage />},
             { path: "*", element: <NotFound /> },
         ]
