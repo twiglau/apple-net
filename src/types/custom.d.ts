@@ -25,7 +25,7 @@ export interface Product {
   startingPrice: number;
   installments: number;
   models: ProductModel[];
-  colors: string[];
+  colors: Color[];
   memorySizes: MemorySize[];
   features: string[];
   inStock: boolean;
