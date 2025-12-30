@@ -14,6 +14,7 @@ import {
   Home,
   NotFound,
   ErrorPage,
+  ShoppingCart,
 } from "../pages";
 import BlankLayout from "@/layouts/BlankLayout";
 import RequireAuth from "@/HOCs/RequireAuth";
@@ -65,6 +66,7 @@ const router =  createBrowserRouter([
                 }
             },
             { path: "search", element: <SearchResults />, errorElement: <ErrorPage />},
+            { path: "cart", element: <ShoppingCart />, errorElement: <ErrorPage />},
             { path: "*", element: <NotFound /> },
         ]
     },

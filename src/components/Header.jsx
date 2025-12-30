@@ -1,6 +1,6 @@
 import Logo from '@/assets/apple.svg?react';
 // 1. 不加 ?react 使用 <img />
-import { AiOutlineMenu, AiOutlineSearch } from 'react-icons/ai';
+import { AiOutlineMenu, AiOutlineSearch, AiOutlineShopping } from 'react-icons/ai';
 import { useState } from 'react';
 import DarkToggle from './DarkToggle';
 import { SHOPPING_PAGES } from "@/assets/data/path"
@@ -81,6 +81,12 @@ export default function Header() {
                     <AiOutlineSearch size={24} />
                 </button>
                 <DarkToggle />
+                <button
+                className='relative'
+                onClick={() => navigate('/cart')}
+                >
+                    <AiOutlineShopping size={24} />
+                </button>
                 <button 
                 className='md:hidden'
                 onClick={() => setIsOpen(true)}
