@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 
 
 export default function ShoppingCart() {
-    const {cartItems, updateItem, removeFromCart} = useContext(CartContext)
+    const {cartItems, updateCartItem, removeFromCart} = useContext(CartContext)
 
     const [total, setTotal] = useState(0);
     useEffect(() => {
@@ -38,7 +38,7 @@ export default function ShoppingCart() {
                         item={item}
                         onItemUpdate={(qty:number) => {
                             const newItem = {...item, qty};
-                            updateItem(index, newItem);
+                            updateCartItem(index, newItem);
                         }}
                         onItemRemove={() => removeFromCart(index)}
                     />
