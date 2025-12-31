@@ -3,8 +3,6 @@ import MainLayout from "@/layouts/MainLayout"
 import { createBrowserRouter, type LoaderFunctionArgs } from "react-router-dom"
 import {
   About,
-  Computers,
-  Ipad,
   Entertainment,
   Support,
   Phones,
@@ -15,6 +13,7 @@ import {
   NotFound,
   ErrorPage,
   ShoppingCart,
+  Category
 } from "../pages";
 import BlankLayout from "@/layouts/BlankLayout";
 import RequireAuth from "@/HOCs/RequireAuth";
@@ -34,13 +33,12 @@ const router =  createBrowserRouter([
                 element: <Home />,
                 errorElement: <ErrorPage />
             },
-            { path: "about", element: <About />, errorElement: <ErrorPage /> },
-            {
-                path: "computers",
-                element: <Computers />,
-                errorElement: <ErrorPage />,
+            { 
+                path: "categories/:category", 
+                element: <Category />, 
+                errorElement: <ErrorPage />
             },
-            { path: "ipad", element: <Ipad />, errorElement: <ErrorPage /> },
+            { path: "about", element: <About />, errorElement: <ErrorPage /> },
             {
                 path: "entertainment",
                 element: <Entertainment />,

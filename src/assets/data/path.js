@@ -8,17 +8,17 @@ export const SHOPPING_PAGES = [
   {
     id: "mac",
     title: "电脑",
-    path: "/computers",
+    path: "categories/computers",
   },
   {
     id: "phone",
     title: "手机",
-    path: "/phones",
+    path: "categories/phones",
   },
   {
     id: "ipad",
     title: "iPad",
-    path: "/ipad",
+    path: "categories/ipad",
   },
   {
     id: "entertainment",

@@ -7,8 +7,11 @@ const initialState: ApiState = {
   data: null,
   error: null,
 };
-const userApiReducer = <T>(url: string) => {
-  const [state, dispatch] = useReducer(apiReducer<T>, initialState);
+const useApiReducer = <T>(url: string) => {
+  const [state, dispatch] = useReducer(
+    apiReducer<T>,
+    initialState as ApiState<T>
+  );
   const { fetchStart, fetchSuccess, fetchError } = useApiAction<T>(dispatch);
 
   const fetchData = async (signal: AbortSignal) => {
@@ -42,4 +45,4 @@ const userApiReducer = <T>(url: string) => {
   } as const;
 };
 
-export default userApiReducer;
+export default useApiReducer;

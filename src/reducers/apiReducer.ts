@@ -9,30 +9,20 @@
 
 import type { Dispatch } from "react";
 
-export const fetchStart = () => ({
-  type: "FETCH_START" as const,
-});
-export const fetchSuccess = <T>(data: T) => ({
-  type: "FETCH_SUCCESS" as const,
-  payload: data,
-});
-export const fetchError = (error: Error) => ({
-  type: "FETCH_ERROR" as const,
-  payload: error,
-});
+export type ApiAction<T> =
+  | { type: "FETCH_START" }
+  | { type: "FETCH_SUCCESS"; payload: T }
+  | { type: "FETCH_ERROR"; payload: Error };
 
 export const useApiAction = <T>(dispatch: Dispatch<ApiAction<T>>) => {
   return {
-    fetchStart: () => dispatch(fetchStart()),
-    fetchSuccess: (data: T) => dispatch(fetchSuccess(data)),
-    fetchError: (error: Error) => dispatch(fetchError(error)),
+    fetchStart: () => dispatch({ type: "FETCH_START" }),
+    fetchSuccess: (data: T) =>
+      dispatch({ type: "FETCH_SUCCESS", payload: data }),
+    fetchError: (error: Error) =>
+      dispatch({ type: "FETCH_ERROR", payload: error }),
   };
 };
-
-export type ApiAction<T> =
-  | ReturnType<typeof fetchStart>
-  | ReturnType<typeof fetchSuccess<T>>
-  | ReturnType<typeof fetchError>;
 
 export type ApiState<T = any> = {
   loading: boolean;
