@@ -22,3 +22,5 @@ export { default as SkuSelect } from "./SkuSelect";
 export * from "./SkuSelect";
 export { default as CartItem } from "./CartItem";
 export * from "./CartItem";
+export { default as FilterButton } from "./FilterButton";
+export * from "./FilterButton";

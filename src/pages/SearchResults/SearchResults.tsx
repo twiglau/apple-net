@@ -1,15 +1,18 @@
 import type { CartItem, Product } from "@/types/custom";
 import { useSearchParams } from "react-router-dom";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useDebounce } from "@/helpers/useDebounce";
 import SearchProductCard from "./SearchProductCard";
-import { Button } from "@/components";
+import { Button, FilterButton } from "@/components";
 import { CartContext } from "@/contexts/shopping";
+
+const filters = ["全部", "电脑", "手机", "平板", "其他"]
 
 const SearchResults = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('query');
     const debouncedQuery = useDebounce(query, 500);
+    const [selectedFilter, setSelectedFilter] = useState('全部');
 
     const {addToCart} = useContext(CartContext);
 
@@ -68,6 +71,16 @@ const SearchResults = () => {
         }
     }, [debouncedQuery]);
 
+    const displayProducts = useMemo(() => {
+        return searchResults.filter((product) => {
+            if (selectedFilter === '全部') {
+                return true;
+            }
+            return product.category === selectedFilter;
+        });
+    }, [searchResults, selectedFilter]);
+
+
 
     return (
         <div className="min-h-screen p-8">
@@ -85,9 +98,19 @@ const SearchResults = () => {
                 />
                 <p>搜索关键词：{query}</p>
             </div>
+            <div className="max-w-4xl mx-auto mb-8 flex gap-4">
+                {filters.map((filter) => (
+                    <FilterButton
+                        key={filter}
+                        filter={filter}
+                        isSelected={filter === selectedFilter}
+                        onClick={() => setSelectedFilter(filter)}
+                    />
+                ))}
+            </div>
             {/* 搜索结果 */}
             <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-                {searchResults.map((product) => (
+                {displayProducts.map((product) => (
                     <SearchProductCard 
                         key={product.id} 
                         product={product} 
