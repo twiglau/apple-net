@@ -24,3 +24,5 @@ export { default as CartItem } from "./CartItem";
 export * from "./CartItem";
 export { default as FilterButton } from "./FilterButton";
 export * from "./FilterButton";
+export { default as Skeleton } from "./Skeleton";
+export * from "./Skeleton";

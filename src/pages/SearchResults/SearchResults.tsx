@@ -1,7 +1,7 @@
 import type { CartItem, Product } from "@/types/custom";
 import { useSearchParams } from "react-router-dom";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { useDebounce } from "@/helpers/useDebounce";
+import { useDebounce } from "@/hooks/useDebounce";
 import SearchProductCard from "./SearchProductCard";
 import { Button, FilterButton } from "@/components";
 import { CartContext } from "@/contexts/shopping";

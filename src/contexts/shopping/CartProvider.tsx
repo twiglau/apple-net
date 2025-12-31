@@ -1,22 +1,11 @@
 import type { CartItem } from "@/types/custom";
 import CartContext from "./CartContext";
-import { useEffect, useState } from "react";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 
 const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
-    const [cartItems, setCartItems] = useState<CartItem[]>( () => {
-        const saveCart = localStorage.getItem("cart");
-        return saveCart ? JSON.parse(saveCart) : [];
-    });
-    
-    useEffect(() => {
-        if(cartItems.length > 0) {
-            localStorage.setItem("cart", JSON.stringify(cartItems));
-        } else {
-            localStorage.removeItem("cart");
-        }
-    }, [cartItems]);
+    const [cartItems, setCartItems] = useLocalStorage<CartItem[]>("cart", []);
 
 
     const addToCart = (item: CartItem) => {
@@ -55,7 +44,13 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
         })
     };
     return (
-        <CartContext.Provider value={{cartItems, addToCart, removeFromCart, updateItem}}>
+        <CartContext.Provider 
+        value={{
+            cartItems,
+            addToCart,
+            removeFromCart,
+            updateItem
+        }}>
             {children}
         </CartContext.Provider>
     );

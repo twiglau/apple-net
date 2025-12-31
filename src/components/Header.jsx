@@ -1,7 +1,7 @@
 import Logo from '@/assets/apple.svg?react';
 // 1. 不加 ?react 使用 <img />
 import { AiOutlineMenu, AiOutlineSearch, AiOutlineShopping } from 'react-icons/ai';
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef, useEffect } from 'react';
 import DarkToggle from './DarkToggle';
 import { SHOPPING_PAGES } from "@/assets/data/path"
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ export default function Header() {
     const [query, setQuery] = useState('');
     const [isSearchEnable,setIsSearchEnable ] = useState(false);
     const navigate = useNavigate();
+    const inputRef = useRef(null);
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
@@ -26,6 +27,11 @@ export default function Header() {
             }
         }
     };
+    useEffect(() => {
+        if(isSearchEnable) {
+            inputRef.current.focus();
+        }
+    }, [isSearchEnable])
 
     return (
         <nav className="text-sm flex items-center 
@@ -57,6 +63,7 @@ export default function Header() {
             { isSearchEnable && (
                 <div className='relative'>
                     <input 
+                    ref={inputRef}
                     className='peer border border-apple-gray-200
                     px-4 py-2 flex-1 rounded-lg 
                     focus:outline-none focus:ring-2 focus:ring-apple-blue transition'
