@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const baseUrl = "http://152.136.182.210:12231/api";
+export const baseUrl = "http://152.136.182.210:12231/api";
 
 const useApiData = <T>(url: string) => {
   const [data, setData] = useState<T | null>(null);
