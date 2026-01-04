@@ -1,28 +1,40 @@
 
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
+import { type RootState, type AppDispatch } from "../redux/store";
+import { login } from "@/redux/user-slice";
 
 function SignIn() {
+  
+  const dispatch = useDispatch<AppDispatch>();
+  const { token, loading, error } = useSelector((state: RootState) => state.user);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (email !== "abc@123.com" || password !== "123456") {
       alert("邮箱或密码错误，请重试。");
       return;
     }
-    // 模拟登录逻辑
-    navigate(
-      location.state?.from || "/", // 优先跳转来源页
-      { replace: true }
-    );
+    dispatch(login({ username: email, password }));
   };
 
+  useEffect(() => {
+    if(loading) return;
+    if(!loading && error) alert(error);
+    if(!loading && token) {
+      localStorage.setItem("token", token);
+      navigate(location.state?.from || "/", { replace: true });
+    }
+  }, [token, error, loading]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-800 to-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-black via-gray-800 to-gray-900 flex items-center justify-center p-4">
       <div className="relative w-full max-w-md">
         {/* 毛玻璃效果背景 */}
         <div className="absolute inset-0 bg-white/5 backdrop-blur-xl rounded-3xl shadow-xl border border-white/10" />

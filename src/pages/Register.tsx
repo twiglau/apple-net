@@ -1,10 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import useApiData from "@/hooks/useApiData";
 
 function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate()
+
+  const { data, loading, error, fetchData } = useApiData<any>("/auth/signup", {
+    method: "POST",
+    autoFetch: false
+  })
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password != confirmPassword) {
+      alert("两次输入的密码不对");
+      return;
+    }
+
+    const body = {
+      username: email,
+      password,
+      confirmPassword,
+    };
+
+    await fetchData({ overrideBody: body });
+  };
+  
+
+  useEffect(() => {
+    if(loading) return;
+    if(!loading && error) alert(error);
+    if(!loading && data) {
+      navigate("/auth/signin", { replace: true });
+    }
+  }, [data, error, loading]);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-black via-gray-800 to-gray-900 flex items-center justify-center p-4">
@@ -37,7 +70,7 @@ function SignUp() {
           </h1>
 
           {/* 注册表单 */}
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-2">
                 用户名

@@ -1,22 +1,73 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
+const methodSet = ["GET", "POST", "PUT", "DELETE"] as const;
+type MethodType = (typeof methodSet)[number];
+
+interface UseApiOptions {
+  method?: MethodType;
+  body?: any;
+  headers?: Record<string, string>;
+  autoFetch?: boolean; // 是否在 mount 时自动发起请求
+}
+
+type ExtraOptions = {
+  overrideUrl?: string;
+  overrideMethod?: MethodType;
+  overrideHeaders?: Record<string, string>;
+  overrideBody?: any;
+};
 export const baseUrl = "http://152.136.182.210:12231/api";
 
-const useApiData = <T>(url: string) => {
+const useApiData = <T>(url: string, options: UseApiOptions = {}) => {
+  const {
+    method = "GET",
+    body = null,
+    headers = {},
+    autoFetch = true,
+  } = options;
+
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async (signal: AbortSignal) => {
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  const fetchData = async (extraOptions?: ExtraOptions) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(baseUrl + url, { signal });
+
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+
+      const response = await fetch(
+        baseUrl + (extraOptions?.overrideUrl || url),
+        {
+          method: extraOptions?.overrideMethod || method,
+          headers: {
+            "Content-Type": "application/json",
+            ...headers,
+            ...extraOptions?.overrideHeaders,
+          },
+          body:
+            (extraOptions?.overrideMethod || method) !== "GET"
+              ? JSON.stringify(extraOptions?.overrideBody || body)
+              : null,
+          signal: controller.signal,
+        }
+      );
+
+      if (response.status === 401) {
+        localStorage.removeItem("token");
+        window.location.href = "/auth/signin";
+      }
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const result: T = await response.json();
       setData(result);
+      setError(null);
     } catch (error) {
       /**
        * 产生原因： 在 React 的开发模式下（StrictMode），组件会执行两次渲染来帮助检测问题。
@@ -33,21 +84,23 @@ const useApiData = <T>(url: string) => {
       setError(error instanceof Error ? error.message : "Unknown error");
       setData(null);
     } finally {
-      if (!signal.aborted) {
-        setLoading(false);
-      }
+      setLoading(false);
+      abortControllerRef.current = null;
     }
   };
 
   useEffect(() => {
-    const controller = new AbortController();
-    fetchData(controller.signal);
     return () => {
-      controller.abort();
+      abortControllerRef.current?.abort();
     };
+  }, []);
+  useEffect(() => {
+    if (!autoFetch) return;
+
+    fetchData();
   }, [url]);
 
-  return { data, loading, error };
+  return { data, loading, error, fetchData };
 };
 
 export default useApiData;
