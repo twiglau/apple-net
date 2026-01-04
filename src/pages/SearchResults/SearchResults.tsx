@@ -5,6 +5,9 @@ import { useDebounce } from "@/hooks/useDebounce";
 import SearchProductCard from "./SearchProductCard";
 import { Button, FilterButton } from "@/components";
 import { CartContext } from "@/contexts/shopping";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/redux/store";
+import { fetchSearchResults } from "@/redux/search-slice";
 
 const filters = ["全部", "电脑", "手机", "平板", "其他"]
 
@@ -13,6 +16,9 @@ const SearchResults = () => {
     const query = searchParams.get('query');
     const debouncedQuery = useDebounce(query, 500);
     const [selectedFilter, setSelectedFilter] = useState('全部');
+
+    const { searchResults } = useSelector((state: RootState) => state.search);
+    const dispatch = useDispatch<AppDispatch>();
 
     const {addToCart} = useContext(CartContext);
 
@@ -23,8 +29,6 @@ const SearchResults = () => {
             page: newPage.toString(),
         });
     };
-    const [searchResults, setSearchResults] = useState<Product[]>([])
-
 
     const cartAction = (product: Product) => {
         const cartItem: CartItem = {
@@ -44,32 +48,15 @@ const SearchResults = () => {
     }
     const handleAddToCart = useCallback(cartAction, []);
 
-    const searchAction = async (signal: AbortSignal) => {
-        try {
-            const response = await fetch(
-                `http://152.136.182.210:12231/api/products?keyword=${debouncedQuery}`,
-                {
-                    signal,
-                }
-            )
-            if(!response.ok) {
-                throw new Error('Network response was not ok')
-            }
-            const data = await response.json();
-            setSearchResults(data);
-        } catch (error) {
-            console.error('Error fetching search results:', error);
-            setSearchResults([]);
-        }
-    }
 
     useEffect(() => {
-        const controller = new AbortController();
-        searchAction(controller.signal);
+        if(!debouncedQuery) return;
+
+        const thunkPromise = dispatch(fetchSearchResults({ keyword: debouncedQuery }))
         return () => {
-            controller.abort();
+            thunkPromise.abort();
         }
-    }, [debouncedQuery]);
+    }, [debouncedQuery, dispatch]);
 
     const displayProducts = useMemo(() => {
         return searchResults.filter((product) => {

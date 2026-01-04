@@ -7,17 +7,35 @@ import { SHOPPING_PAGES } from "@/assets/data/path"
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion as Motion } from 'framer-motion'
 import { CartContext } from '@/contexts/shopping';
+import { IoLanguageOutline } from 'react-icons/io5';
+import { languageSet, type LanguageCode,setLanguageCode } from '@/redux/i18n-slice';
+import { useSelector,useDispatch} from 'react-redux';
+import type { RootState } from '@/redux/store';
 
 export default function Header() {
+
+    const currentLanguage = useSelector<RootState, LanguageCode>((state: RootState) => state.i18n.langCode);
+    const dispatch = useDispatch();
 
     const {cartItems} = useContext(CartContext)
     const [isOpen, setIsOpen] = useState(false);
     const [query, setQuery] = useState('');
     const [isSearchEnable,setIsSearchEnable ] = useState(false);
     const navigate = useNavigate();
-    const inputRef = useRef(null);
+    const inputRef = useRef<HTMLInputElement|null>(null);
 
-    const handleKeyDown = (e) => {
+    const handleLanguageChange = () => {
+        const currentIndex = languageSet.indexOf(currentLanguage);
+        const nextIndex = (currentIndex + 1) % languageSet.length;
+        console.log(nextIndex);
+        if(nextIndex < 4) {
+            dispatch(setLanguageCode(languageSet[nextIndex]!));
+        } else {
+            dispatch(setLanguageCode(languageSet[0]));
+        } 
+    }
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             // 处理搜索逻辑
             e.preventDefault();
@@ -29,7 +47,7 @@ export default function Header() {
     };
     useEffect(() => {
         if(isSearchEnable) {
-            inputRef.current.focus();
+            inputRef.current?.focus();
         }
     }, [isSearchEnable])
 
@@ -91,6 +109,11 @@ export default function Header() {
                     <AiOutlineSearch size={24} />
                 </button>
                 <DarkToggle />
+                <button
+                onClick={() => handleLanguageChange()}
+                >
+                    <IoLanguageOutline size={24} />
+                </button>
                 <button
                 className='relative'
                 onClick={() => navigate('/cart')}

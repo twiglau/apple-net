@@ -4,7 +4,12 @@ import { useContext, useEffect, useState } from "react";
 
 
 export default function ShoppingCart() {
-    const {cartItems, updateCartItem, removeFromCart} = useContext(CartContext)
+    const {
+        cartItems, 
+        updateCartItem, 
+        removeFromCart, 
+        clearCart
+    } = useContext(CartContext)
 
     const [total, setTotal] = useState(0);
     useEffect(() => {
@@ -63,6 +68,7 @@ export default function ShoppingCart() {
                         RMB {(total + shoppingFee).toLocaleString()}
                     </p>
                     <div className="col-span-2 flex justify-end mt-12">
+                        <Button title="清空购物车" onClick={clearCart} />
                         <Button title="结账" />
                     </div>
                 </div>
