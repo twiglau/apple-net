@@ -3,7 +3,7 @@ import Logo from '@/assets/apple.svg?react';
 import { AiOutlineMenu, AiOutlineSearch, AiOutlineShopping } from 'react-icons/ai';
 import { useContext, useState, useRef, useEffect } from 'react';
 import DarkToggle from './DarkToggle';
-import { SHOPPING_PAGES } from "@/assets/data/path"
+import { AUTH_PAGES, SHOPPING_PAGES } from "@/assets/data/path"
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion as Motion } from 'framer-motion'
 import { CartContext } from '@/contexts/shopping';
@@ -11,9 +11,13 @@ import { IoLanguageOutline } from 'react-icons/io5';
 import { languageSet, type LanguageCode,setLanguageCode } from '@/redux/i18n-slice';
 import { useSelector,useDispatch} from 'react-redux';
 import type { RootState } from '@/redux/store';
+import { parseJwt } from '@/helpers/jwt';
+import { logout } from '@/redux/user-slice';
 
 export default function Header() {
 
+    const [username, setUsername] = useState<string|null>(null);
+    const { token } = useSelector((state: RootState) => state.user)
     const currentLanguage = useSelector<RootState, LanguageCode>((state: RootState) => state.i18n.langCode);
     const dispatch = useDispatch();
 
@@ -45,11 +49,26 @@ export default function Header() {
             }
         }
     };
+
+    const handleLogout = () => {
+        dispatch(logout());
+        setUsername(null);
+        navigate('/auth/signin');
+    }
     useEffect(() => {
         if(isSearchEnable) {
             inputRef.current?.focus();
         }
     }, [isSearchEnable])
+
+    useEffect(() => {
+        if(token) {
+           const decode = parseJwt(token);
+           if(decode && decode.name) {
+            setUsername(decode.name);
+           } 
+        }
+    }, [token])
 
     return (
         <nav className="text-sm flex items-center 
@@ -138,6 +157,32 @@ export default function Header() {
                         )}
                     </AnimatePresence>
                 </button>
+                {username ? (
+                   <>
+                   <span className='hidden md:block'>{username}</span>
+                   <button
+                   onClick={handleLogout}
+                   className='hidden md:block hover:text-apple-blue'
+                   >
+                    登出
+                   </button>
+                   </>
+                ) : (
+                    AUTH_PAGES.map((page) => (
+                        <NavLink
+                        key={page.id}
+                        to={page.path}
+                        className={({isActive}) => `hover:text-apple-blue hidden md:block ${
+                            isActive 
+                            ? 'text-apple-blue font-extrabold' 
+                            : 'text-apple-text-light dark:text-apple-text-dark'
+                          }
+                        `}
+                        >
+                            {page.title}
+                        </NavLink>
+                    ))
+                )}
                 <button 
                 className='md:hidden'
                 onClick={() => setIsOpen(true)}
