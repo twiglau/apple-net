@@ -11,16 +11,6 @@ export const SHOPPING_PAGES = [
     path: "categories/computers",
   },
   {
-    id: "phone",
-    title: "手机",
-    path: "categories/phones",
-  },
-  {
-    id: "ipad",
-    title: "iPad",
-    path: "categories/ipad",
-  },
-  {
     id: "entertainment",
     title: "娱乐",
     path: "/entertainment",

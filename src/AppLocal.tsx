@@ -6,8 +6,6 @@ import Footer from '@components/Footer'
 import { Route, Routes } from "react-router-dom";
 import {
     About,
-    Computers,
-    Ipad,
     Entertainment,
     Support,
     SmartHome,
@@ -32,8 +30,6 @@ function App() {
             {/* 这里的 Outlet 用于渲染嵌套路由的内容 */}
             <Route index element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/computers" element={<Computers />} />
-            <Route path="/ipad" element={<Ipad />} />
             <Route path="/entertainment" element={<Entertainment />} />
             <Route path="/support" element={<Support />} />
             <Route path="/smarthome" element={<SmartHome />} />

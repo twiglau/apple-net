@@ -190,12 +190,22 @@ export default function Header() {
                   <AiOutlineMenu size={24} />
                 </button>
             </div>
-            <div className={`md:hidden fixed top-0 right-0 h-full w-64 ${!isOpen && "hidden"}`}>
-                <div className='flex flex-col mt-17  space-y-6 
-                bg-apple-light 
+            {isOpen && (
+                <div
+                    className='fixed inset-0 z-40
+                    bg-apple-black/50
+                    dark:bg-apple-white/10
+                    backdrop-blur-md'
+                    onClick={() => setIsOpen(false)}
+                >
+                </div>
+            )}
+            <div className={`md:hidden fixed top-0 right-0 h-full w-64 z-50 ${!isOpen && "hidden"}`}>
+                <div className='flex flex-col mt-17  space-y-6
+                bg-apple-light
                 dark:bg-apple-dark
                   shadow-apple-md
-                text-apple-text-light 
+                text-apple-text-light
                    dark:text-apple-text-dark
                    text-center p-6 rounded-lg'>
                     {SHOPPING_PAGES.map((page) => (
@@ -204,8 +214,8 @@ export default function Header() {
                         key={page.path}
                         className={({isActive}) => `
                           hover:text-apple-blue ${
-                            isActive 
-                            ? 'text-apple-blue font-extrabold' 
+                            isActive
+                            ? 'text-apple-blue font-extrabold'
                             : 'text-apple-text-light dark:text-apple-text-dark'
                           }
                         `}
@@ -216,16 +226,6 @@ export default function Header() {
                     ))}
                 </div>
             </div>
-            {isOpen && (
-                <div 
-                    className='fixed inset-0 
-                    bg-apple-black/50 
-                    dark:bg-apple-white/10 
-                    backdrop-blur-md'
-                    onClick={() => setIsOpen(false)}
-                >
-                </div>
-            )}
         </nav>
     )
 }
