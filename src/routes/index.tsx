@@ -22,6 +22,9 @@ import UserLayout from "@/layouts/UserLayout";
 import { ProductDetail } from "@/pages/ProductDetail";
 import {SearchResults} from "@/pages/SearchResults";
 import { loadProducts } from "@/helpers/loaders";
+import ZustandLayout from "@/layouts/ZustandLayout";
+import { ZUSTAND_PAGES } from "@/assets/data/zustand";
+import { lazy } from "react";
 
 const router =  createBrowserRouter([
     {
@@ -76,6 +79,16 @@ const router =  createBrowserRouter([
         { path: "signin", element: <SignIn /> },
         { path: "register", element: <Register /> },
         ],
+    },
+    {
+        path: "/zustand",
+        element: <ZustandLayout />,
+        children: ZUSTAND_PAGES.map((page, i) => {
+            const LazyComponent = lazy(page.element);
+            return i === 0
+                ? { index: true, element: <LazyComponent /> }
+                : { path: page.path.replace("/zustand/", ""), element: <LazyComponent /> };
+        }),
     },
     {
         path: "/user",

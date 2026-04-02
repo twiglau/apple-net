@@ -20,6 +20,11 @@ export const SHOPPING_PAGES = [
     title: "技术支持",
     path: "/support",
   },
+  {
+    id: "zustand",
+    title: "Zustand",
+    path: "/zustand",
+  },
 ];
 
 export const AUTH_PAGES = [
@@ -78,6 +83,8 @@ export const ABOUT_PAGES = [
     path: "#",
   },
 ];
+
+
 
 export const LEGAL_PAGES = [
   {

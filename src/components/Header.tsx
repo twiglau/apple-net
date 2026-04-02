@@ -121,7 +121,7 @@ export default function Header() {
                     </label>
                 </div>
             )}
-            <div className='gap-2 space-x-2 text-apple-text-light dark:text-apple-text-dark'>
+            <div className='gap-2  flex items-center space-x-2 text-apple-text-light dark:text-apple-text-dark'>
                 <button
                 onClick={() => setIsSearchEnable(!isSearchEnable)}
                 >
@@ -172,7 +172,7 @@ export default function Header() {
                         <NavLink
                         key={page.id}
                         to={page.path}
-                        className={({isActive}) => `hover:text-apple-blue hidden md:block ${
+                        className={({isActive}) => `hover:text-apple-blue hidden md:inline-block ${
                             isActive 
                             ? 'text-apple-blue font-extrabold' 
                             : 'text-apple-text-light dark:text-apple-text-dark'
