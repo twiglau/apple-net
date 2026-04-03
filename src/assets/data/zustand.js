@@ -56,5 +56,13 @@ export const ZUSTAND_PAGES = [
         path: "/zustand/storage",
         end: true,
         element: () => import("@/pages/Zustand/storage/index"),
+    },
+    {
+        id: "async-request",
+        title: "异步请求示例",
+        path: "/zustand/async-request",
+        end: true,
+        element: () => import("@/pages/Zustand/async-request/index"),
+
     }
 ];
