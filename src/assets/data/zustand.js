@@ -35,5 +35,12 @@ export const ZUSTAND_PAGES = [
         path: "/zustand/sts-oper-separation",
         end: true,
         element: () => import("@/pages/Zustand/sts-oper-separator/index"),
+    },
+    {
+        id: "context-store",
+        title: "每个组件相同store,不同状态",
+        path: "/zustand/context-store",
+        end: true,
+        element: () => import("@/pages/Zustand/context-store/index"),
     }
 ];
