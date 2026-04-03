@@ -25,7 +25,7 @@ interface TabStoreProps {
 // 定义单个 Tab 项的数据结构
 export interface TabItem {
     id: string;
-    label: string;
+    label: React.ReactNode;
     content: React.ReactNode;
 }
 

@@ -42,5 +42,12 @@ export const ZUSTAND_PAGES = [
         path: "/zustand/context-store",
         end: true,
         element: () => import("@/pages/Zustand/context-store/index"),
+    },
+    {
+        id: "cart",
+        title: "购物车示例",
+        path: "/zustand/cart",
+        end: true,
+        element: () => import("@/pages/Zustand/cart/index"),
     }
 ];
