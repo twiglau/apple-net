@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { immer } from "zustand/middleware/immer"; // 如果需要使用中间件，可以在这里导入
 
 export interface Product {
   id: number;
@@ -26,67 +27,66 @@ interface CartState {
   getSelectedItems: () => CartItem[];
 }
 
-export const useCartStore = create<CartState>((set, get, store) => ({
-  items: [],
-  addToCart: (product) => {
-    set((state) => {
-      const existingItem = state.items.find((item) => item.id === product.id);
-      if (existingItem) {
-        return {
-          items: state.items.map((item) =>
-            item.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item,
-          ),
-        };
-      } else {
-        return {
-          items: [...state.items, { ...product, quantity: 1, selected: false }],
-        };
-      }
-    });
-  },
-  removeFromCart: (productId) => {
-    set((state) => ({
-      items: state.items.filter((item) => item.id !== productId),
-    }));
-  },
-  updateQuantity: (productId, quantity) => {
-    set((state) => ({
-      items: state.items.map((item) =>
-        item.id === productId
-          ? { ...item, quantity: Math.max(1, item.quantity + quantity) }
-          : item,
-      ),
-    }));
-  },
-  toggleSelectItem: (productId) => {
-    set((state) => ({
-      items: state.items.map((item) =>
-        item.id === productId ? { ...item, selected: !item.selected } : item,
-      ),
-    }));
-  },
-  toggleSelectAll: (checked) => {
-    set((state) => {
-      return {
-        items: state.items.map((item) => ({ ...item, selected: checked })),
-      };
-    });
-  },
-  clearCart: () => {
-    set(store.getInitialState());
-  },
-  getTotalPrice: () => {
-    const items = get().items;
-    return items.reduce((total, item) => total + item.price * item.quantity, 0);
-  },
-  getTotalItems: () => {
-    const items = get().items;
-    return items.reduce((total, item) => total + item.quantity, 0);
-  },
-  getSelectedItems: () => {
-    const items = get().items;
-    return items.filter((item) => item.selected);
-  },
-}));
+export const useCartStore = create<CartState>()(
+  immer((set, get, store) => ({
+    items: [],
+    addToCart: (product) => {
+      set((state) => {
+        const existingItem = state.items.find((item) => item.id === product.id);
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          state.items.push({ ...product, quantity: 1, selected: false });
+        }
+      });
+    },
+    removeFromCart: (productId) => {
+      set((state) => {
+        state.items = state.items.filter((item) => item.id !== productId);
+      });
+    },
+    updateQuantity: (productId, quantity) => {
+      set((state) => {
+        const item = state.items.find((item) => item.id === productId);
+        if (item) {
+          item.quantity = Math.max(1, item.quantity + quantity);
+        }
+      });
+    },
+    toggleSelectItem: (productId) => {
+      set((state) => {
+        const item = state.items.find((item) => item.id === productId);
+        if (item) {
+          item.selected = !item.selected;
+        }
+      });
+    },
+    toggleSelectAll: (checked) => {
+      set((state) => {
+        state.items.forEach((item) => {
+          item.selected = checked;
+        });
+      });
+    },
+    clearCart: () => {
+      set((state) => {
+        state.items = [];
+      });
+    },
+    getTotalPrice: () => {
+      const items = get().items;
+      return items.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0,
+      );
+    },
+    getTotalItems: () => {
+      const items = get().items;
+      return items.reduce((total, item) => total + item.quantity, 0);
+    },
+    getSelectedItems: () => {
+      const items = get().items;
+      return items.filter((item) => item.selected);
+    },
+  })),
+);

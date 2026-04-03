@@ -49,5 +49,12 @@ export const ZUSTAND_PAGES = [
         path: "/zustand/cart",
         end: true,
         element: () => import("@/pages/Zustand/cart/index"),
+    },
+    {
+        id: "storage",
+        title: "本地存储示例",
+        path: "/zustand/storage",
+        end: true,
+        element: () => import("@/pages/Zustand/storage/index"),
     }
 ];
