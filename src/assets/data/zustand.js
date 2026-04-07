@@ -77,5 +77,12 @@ export const ZUSTAND_PAGES = [
         path: "/zustand/list",
         end: true,
         element: () => import("@/pages/Zustand/list/index")
+    },
+    {
+        id: "tanstack-query",
+        title: "tanstack-query 结合 zustand",
+        path: "/zustand/tanstack",
+        end: true,
+        element: () => import("@/pages/Zustand/tanstack-query/index")
     }
 ];

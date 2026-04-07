@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-function randomMessage() {
+export function randomMessage() {
   // 模拟随机消息
   const messages = [
     "Hello from async request!",
