@@ -70,5 +70,12 @@ export const ZUSTAND_PAGES = [
         path: "/zustand/custom-hook",
         end: true,
         element: () => import("@/pages/Zustand/async-request-and-custom-hook/index")
+    },
+    {
+        id: "list-update",
+        title: "长列表数据优化",
+        path: "/zustand/list",
+        end: true,
+        element: () => import("@/pages/Zustand/list/index")
     }
 ];
