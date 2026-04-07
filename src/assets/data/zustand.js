@@ -63,6 +63,12 @@ export const ZUSTAND_PAGES = [
         path: "/zustand/async-request",
         end: true,
         element: () => import("@/pages/Zustand/async-request/index"),
-
+    },
+    {
+        id: "async-request-and-custom-hook",
+        title: "自定义Hook中使用",
+        path: "/zustand/custom-hook",
+        end: true,
+        element: () => import("@/pages/Zustand/async-request-and-custom-hook/index")
     }
 ];
